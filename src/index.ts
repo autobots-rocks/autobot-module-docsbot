@@ -1,1 +1,1 @@
-export * from './Commands/FlipCommand';
+export * from './Commands/JavascriptCommand';
