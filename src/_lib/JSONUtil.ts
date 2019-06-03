@@ -15,8 +15,18 @@ export class JSONUtil {
 
                 const fuzz = new FuzzySet(Object.keys(json));
 
-                console.log(fuzz.get(name));
-                console.log(fuzz.get(name)[ 0 ][ 1 ]);
+                // If not found, return null
+                if (fuzz.get(name) === null) {
+                    return {
+
+                        key: "",
+                        name: "",
+                        doc: "",
+                        pages: 0,
+                        found: false
+
+                    };
+                }
 
                 const key = fuzz.get(name)[ 0 ][ 1 ];
 
@@ -37,7 +47,8 @@ export class JSONUtil {
                     key,
                     name,
                     doc: json[ key ],
-                    pages
+                    pages,
+                    found: true
 
                 };
 
