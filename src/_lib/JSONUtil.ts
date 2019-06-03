@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import { Doc } from './Doc';
 
+const FuzzySet = require('fuzzyset.js');
+
 export class JSONUtil {
 
     public static getByName(filename: string, name: string): Doc {
@@ -11,38 +13,33 @@ export class JSONUtil {
 
                 const json = require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
 
-                for (let key in json) {
+                const fuzz = new FuzzySet(Object.keys(json));
 
-                    console.log(key);
+                console.log(fuzz.get(name));
+                console.log(fuzz.get(name)[ 0 ][ 1 ]);
 
-                    const split = key.split(/[\/.]/);
+                const key = fuzz.get(name)[ 0 ][ 1 ];
 
-                    if (split[ split.length - 1 ] == name) {
+                let pages: number = 0;
 
-                        let pages: number = 0;
+                if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
 
-                        if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+                    pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
 
-                            pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+                } else {
 
-                        } else {
-
-                            pages = 0;
-
-                        }
-
-                        return {
-
-                            key,
-                            name,
-                            doc: json[ key ],
-                            pages
-
-                        };
-
-                    }
+                    pages = 0;
 
                 }
+
+                return {
+
+                    key,
+                    name,
+                    doc: json[ key ],
+                    pages
+
+                };
 
             }
 
@@ -74,7 +71,7 @@ export class JSONUtil {
                 return terms;
 
             }
-            
+
         }
 
     }
