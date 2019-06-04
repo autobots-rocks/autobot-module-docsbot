@@ -77,7 +77,6 @@ export class DocsCommand extends CommandBase {
         const lang = command.command.split('#');
 
         if (lang[ 1 ]) {
-            //console.log(command.arguments[ 0 ].name);
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
 
             if (result.found) {
