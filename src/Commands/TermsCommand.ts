@@ -16,7 +16,7 @@ export class TermsCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: '#terms',
+            name: '##terms',
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [

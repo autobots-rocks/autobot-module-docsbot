@@ -18,7 +18,7 @@ export class CheatShCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: '#cheat',
+            name: '>cheat',
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [
