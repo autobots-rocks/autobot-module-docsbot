@@ -75,7 +75,11 @@ export class DocsCommand extends CommandBase {
         let currentPage: number = 0;
 
         // @ts-ignore
-        console.log(command.obj.message.cleanContent);
+
+        console.log(command);
+
+        console.log(123);
+        console.log(command.obj);
 
         // @ts-ignore
         const matches = command.obj.message.cleanContent.match(/^#([a-z0-9-./]+)\s+([a-z0-9-./]+)$/);
