@@ -56,7 +56,7 @@ export class DocsCommand extends CommandBase {
             event: Event.MESSAGE,
             name: '*',
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_SEARCH', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [ process.env.DOCSBOT_ADMIN_ROLE_NAME ],
             description: '#language <search term>'
 
@@ -74,7 +74,7 @@ export class DocsCommand extends CommandBase {
 
         let currentPage: number = 0;
 
-        const matches = command.obj.content.match(/^#([a-z0-9-./]+)\s+([a-z0-9-./]+)$/);
+        const matches = command.obj.content.match(new RegExp(process.env.DOCSBOT_PREFIX_SEARCH + '^([a-z0-9-./]+)\s+([a-z0-9-./]+)$'));
 
         if (matches && matches.length === 3) {
 

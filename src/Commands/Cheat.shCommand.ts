@@ -18,9 +18,9 @@ export class CheatShCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: '>cheat',
+            name: `${ process.env.DOCSBOT_PREFIX_CHEAT }`,
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_CHEAT', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [
 
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
