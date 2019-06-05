@@ -8,6 +8,8 @@ import * as fs                                        from 'fs';
 @Command
 export class ListFilesCommand extends CommandBase {
 
+    public static readonly BLOCKED_FILES: Array<string> = [ 'lost+found' ];
+
     public constructor() {
 
         //
@@ -44,7 +46,7 @@ export class ListFilesCommand extends CommandBase {
 
             command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable languages list`)
                                                     .setColor(3447003)
-                                                    .setDescription(result.join(', ').replace(/\.json/g, '')));
+                                                    .setDescription(result.filter(val => ListFilesCommand.BLOCKED_FILES.indexOf(val) === -1).join(', ').replace(/\.json/g, '')));
 
         } else {
 
