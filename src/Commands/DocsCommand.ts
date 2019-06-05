@@ -72,13 +72,11 @@ export class DocsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        console.log(123123);
-
         let currentPage: number = 0;
 
         const lang = command.command.split('#');
 
-        if (lang && lang.length === 1 && lang[ 1 ]) {
+        if (lang && lang.length === 2 && lang[ 1 ]) {
 
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
 
