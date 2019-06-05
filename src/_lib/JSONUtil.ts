@@ -13,36 +13,36 @@ export class JSONUtil {
 
                 const json = require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
 
-                console.log(Object.keys(json));
-
                 const fuzz = new FuzzySet(Object.keys(json));
 
-                console.log(name);
-                console.log(fuzz.get(name));
-                console.log(fuzz.get(name)[ 0 ][ 1 ]);
+                const result = fuzz.get(name);
 
-                const key = fuzz.get(name)[ 0 ][ 1 ];
+                if (result && result[ 0 ][ 1 ]) {
+                    
+                    const key = result[ 0 ][ 1 ];
 
-                let pages: number = 0;
+                    let pages: number = 0;
 
-                if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+                    if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
 
-                    pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+                        pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
 
-                } else {
+                    } else {
 
-                    pages = 0;
+                        pages = 0;
+
+                    }
+
+                    return {
+
+                        key,
+                        name,
+                        doc: json[ key ],
+                        pages
+
+                    };
 
                 }
-
-                return {
-
-                    key,
-                    name,
-                    doc: json[ key ],
-                    pages
-
-                };
 
             }
 
