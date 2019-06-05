@@ -80,7 +80,6 @@ export class DocsCommand extends CommandBase {
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
 
             if (result !== null) {
-                console.log("woo");
 
                 const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage));
 
@@ -128,7 +127,6 @@ export class DocsCommand extends CommandBase {
                 });
 
             } else {
-                console.log("waa");
                 command.obj.channel.send(new RichEmbed().setTitle('devdocs')
                                                          .setColor(15158332)
                                                          .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
