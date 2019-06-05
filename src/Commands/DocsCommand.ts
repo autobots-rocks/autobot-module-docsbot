@@ -74,11 +74,11 @@ export class DocsCommand extends CommandBase {
 
         let currentPage: number = 0;
 
-        const lang = command.command.split('#');
+        const matches = command.command.match(/^#([a-z0-9-./]+)\s+([a-z0-9-./]+)$/);
 
-        if (lang && lang.length === 2 && lang[ 1 ]) {
+        if (matches && matches.length === 3) {
 
-            const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
+            const result = JSONUtil.getByName(matches[ 1 ], matches[ 2 ]);
 
             if (result) {
 
@@ -132,8 +132,8 @@ export class DocsCommand extends CommandBase {
                 command.obj.channel.send(new RichEmbed().setTitle('devdocs')
                                                         .setColor(15158332)
                                                         .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
-                                                                          for the language "${ lang[ 1 ] }".
-                                                                          To see a list of all possible terms, use the command \`#terms ${ lang [ 1 ] }\`.
+                                                                          for the language "${ matches[ 1 ] }".
+                                                                          To see a list of all possible terms, use the command \`#terms ${ matches [ 1 ] }\`.
                                                                          `));
 
             }
