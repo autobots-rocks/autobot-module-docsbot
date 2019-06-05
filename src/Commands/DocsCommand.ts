@@ -17,7 +17,7 @@ export class DocsCommand extends CommandBase {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io url', `https://devdocs.io/javascript/${ doc.key }`)
+                              .addField('devdocs.io urlssssss', `https://devdocs.io/javascript/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
@@ -79,7 +79,8 @@ export class DocsCommand extends CommandBase {
         if (lang[ 1 ]) {
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
 
-            if (result.found) {
+            if (result !== null) {
+                console.log("woo");
 
                 const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage));
 
@@ -126,8 +127,8 @@ export class DocsCommand extends CommandBase {
 
                 });
 
-            } else if (result !== null) {
-
+            } else {
+                console.log("waa");
                 command.obj.channel.send(new RichEmbed().setTitle('devdocs')
                                                          .setColor(15158332)
                                                          .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\

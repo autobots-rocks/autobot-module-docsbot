@@ -17,15 +17,7 @@ export class JSONUtil {
 
                 // If not found, return null
                 if (fuzz.get(name) === null) {
-                    return {
-
-                        key: "",
-                        name: "",
-                        doc: "",
-                        pages: 0,
-                        found: false
-
-                    };
+                    return null;
                 }
 
                 const key = fuzz.get(name)[ 0 ][ 1 ];
@@ -47,8 +39,7 @@ export class JSONUtil {
                     key,
                     name,
                     doc: json[ key ],
-                    pages,
-                    found: true
+                    pages
 
                 };
 

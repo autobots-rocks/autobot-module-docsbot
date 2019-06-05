@@ -4,6 +4,5 @@ export class Doc {
     public name: string;
     public doc: string;
     public pages: number;
-    public found: boolean;
 
 }
