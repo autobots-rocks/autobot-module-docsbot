@@ -80,7 +80,9 @@ export class DocsCommand extends CommandBase {
 
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
 
-            if (result !== null) {
+            console.log(result);
+
+            if (result) {
 
                 const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage));
 
@@ -135,7 +137,7 @@ export class DocsCommand extends CommandBase {
                                                                           for the language "${ lang[ 1 ] }".
                                                                           To see a list of all possible terms, use the command \`#terms ${ lang [ 1 ] }\`.
                                                                          `));
- 
+
             }
 
         }

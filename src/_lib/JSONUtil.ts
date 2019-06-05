@@ -7,7 +7,7 @@ export class JSONUtil {
 
     public static getByName(filename: string, name: string): Doc {
 
-        if (filename.match(/^[a-z0-9-~._]+$/i)) {
+        if (filename.match(/^[a-z0-9-/~._]{2,32}$/i)) {
 
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
@@ -18,7 +18,7 @@ export class JSONUtil {
                 const result = fuzz.get(name);
 
                 if (result && result[ 0 ][ 1 ]) {
-                    
+
                     const key = result[ 0 ][ 1 ];
 
                     let pages: number = 0;
