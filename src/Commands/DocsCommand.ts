@@ -58,7 +58,7 @@ export class DocsCommand extends CommandBase {
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [ process.env.DOCSBOT_ADMIN_ROLE_NAME ],
-            description: '#javascript <search term>'
+            description: '#language <search term>'
 
         });
 
@@ -72,15 +72,15 @@ export class DocsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
+        console.log(123123);
+
         let currentPage: number = 0;
 
         const lang = command.command.split('#');
 
-        if (lang[ 1 ]) {
+        if (lang && lang.length === 1 && lang[ 1 ]) {
 
             const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
-
-            console.log(result);
 
             if (result) {
 
