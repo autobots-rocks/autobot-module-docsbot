@@ -74,7 +74,7 @@ export class DocsCommand extends CommandBase {
 
         let currentPage: number = 0;
 
-        const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{2,32})\\s+([a-z0-9-/~._]{2,32})$'));
+        const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{2,32})\\s+([a-z0-9-/~._]{2,64})$'));
 
         if (matches && matches.length === 3) {
 

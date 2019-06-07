@@ -2,13 +2,11 @@ import * as fs   from 'fs';
 import * as Fuse from 'fuse.js';
 import { Doc }   from './Doc';
 
-const FuzzySet = require('fuzzyset.js');
-
 export class JSONUtil {
 
     public static getByName(filename: string, name: string): Doc {
 
-        if (filename.match(/^[a-z0-9-/~._]{2,32}$/i)) {
+        if (filename.match(/^[a-z0-9-/~._]{2,64}$/i)) {
 
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
@@ -20,7 +18,7 @@ export class JSONUtil {
                     const fuse = new Fuse(objects, {
 
                         shouldSort: true,
-                        threshold: 0.6,
+                        threshold: 0.3,
                         location: 0,
                         distance: 100,
                         maxPatternLength: 32,
