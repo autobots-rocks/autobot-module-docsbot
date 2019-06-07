@@ -133,7 +133,7 @@ export class DocsCommand extends CommandBase {
                                                         .setColor(15158332)
                                                         .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
                                                                           for the language "${ matches[ 1 ] }".
-                                                                          To see a list of all possible terms, use the command \`#terms ${ matches [ 1 ] }\`.
+                                                                          To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_SEARCH } ${ matches [ 1 ] }\`.
                                                                          `));
 
             }
