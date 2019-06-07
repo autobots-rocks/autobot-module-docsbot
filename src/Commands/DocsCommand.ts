@@ -56,7 +56,7 @@ export class DocsCommand extends CommandBase {
             event: Event.MESSAGE,
             name: '*',
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_PREFIX_SEARCH', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_SEARCH', 'DOCSBOT_PREFIX_TERMS', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [ process.env.DOCSBOT_ADMIN_ROLE_NAME ],
             description: ';language <search term>'
 
@@ -133,7 +133,7 @@ export class DocsCommand extends CommandBase {
                                                         .setColor(15158332)
                                                         .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
                                                                           for the language "${ matches[ 1 ] }".
-                                                                          To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_SEARCH } ${ matches [ 1 ] }\`.
+                                                                          To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
                                                                          `));
 
             }
