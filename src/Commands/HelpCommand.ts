@@ -4,12 +4,10 @@ import * as fs                                        from 'fs';
 import { ListFilesCommand }                           from './ListFilesCommand';
 
 /**
- * Outputs the filenames.
+ * Outputs help information.
  */
 @Command
 export class HelpCommand extends CommandBase {
-
-    public static readonly BLOCKED_FILES: Array<string> = [ 'lost+found' ];
 
     public constructor() {
 
@@ -19,11 +17,11 @@ export class HelpCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: `${ process.env.DOCSBOT_PREFIX_LIST }`,
+            name: `${ process.env.DOCSBOT_PREFIX_HELP }`,
             group: 'docs',
             requiredEnvVars: [
 
-                'DOCSBOT_HELP_PREFIX',
+                'DOCSBOT_PREFIX_HELP',
                 'DOCSBOT_PREFIX_SEARCH',
                 'DOCSBOT_SAVE_PATH',
                 'DOCSBOT_ADMIN_ROLE_NAME',
