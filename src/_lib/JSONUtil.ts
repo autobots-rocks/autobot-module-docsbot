@@ -87,7 +87,7 @@ export class JSONUtil {
 
                 }
 
-                return terms;
+                return terms.sort();
 
             }
 
