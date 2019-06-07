@@ -1,5 +1,6 @@
-import * as fs from 'fs';
-import { Doc } from './Doc';
+import * as fs   from 'fs';
+import * as Fuse from 'fuse.js';
+import { Doc }   from './Doc';
 
 const FuzzySet = require('fuzzyset.js');
 
@@ -9,38 +10,54 @@ export class JSONUtil {
 
         if (filename.match(/^[a-z0-9-/~._]{2,32}$/i)) {
 
+
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
                 const json = require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
+                const objects = JSONUtil.getObjects(filename);
 
-                const fuzz = new FuzzySet(Object.keys(json));
+                if (objects && objects.length > 0) {
 
-                const result = fuzz.get(name);
+                    const fuse = new Fuse(objects, {
 
-                if (result && result[ 0 ][ 1 ]) {
+                        shouldSort: true,
+                        threshold: 0.6,
+                        location: 0,
+                        distance: 100,
+                        maxPatternLength: 32,
+                        minMatchCharLength: 1,
+                        keys: [ "name" ]
 
-                    const key = result[ 0 ][ 1 ];
+                    });
 
-                    let pages: number = 0;
+                    const result = fuse.search(name);
 
-                    if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+                    if (result && result.length > 0) {
 
-                        pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+                        const key = result[ 0 ].name;
 
-                    } else {
+                        let pages: number = 0;
 
-                        pages = 0;
+                        if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+
+                            pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+
+                        } else {
+
+                            pages = 0;
+
+                        }
+
+                        return {
+
+                            key,
+                            name,
+                            doc: json[ key ],
+                            pages
+
+                        };
 
                     }
-
-                    return {
-
-                        key,
-                        name,
-                        doc: json[ key ],
-                        pages
-
-                    };
 
                 }
 
@@ -74,6 +91,26 @@ export class JSONUtil {
                 return terms;
 
             }
+
+        }
+
+    }
+
+    public static getObjects(filename: string): Array<{ name: string }> {
+
+        if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
+
+            const objects: Array<{ name: string }> = [];
+
+            const json = require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
+
+            if (json) {
+
+                Object.keys(json).forEach(key => objects.push({ name: key }));
+
+            }
+
+            return objects;
 
         }
 
