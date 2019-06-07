@@ -10,7 +10,6 @@ export class JSONUtil {
 
         if (filename.match(/^[a-z0-9-/~._]{2,32}$/i)) {
 
-
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
                 const json = require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
