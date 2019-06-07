@@ -17,7 +17,7 @@ export class DocsCommand extends CommandBase {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io urlssssss', `https://devdocs.io/javascript/${ doc.key }`)
+                              .addField('devdocs.io url', `https://devdocs.io/javascript/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
