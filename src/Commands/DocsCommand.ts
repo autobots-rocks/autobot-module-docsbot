@@ -58,7 +58,7 @@ export class DocsCommand extends CommandBase {
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_PREFIX_SEARCH', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [ process.env.DOCSBOT_ADMIN_ROLE_NAME ],
-            description: '#language <search term>'
+            description: ';language <search term>'
 
         });
 
