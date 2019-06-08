@@ -13,11 +13,11 @@ export class DocsCommand extends CommandBase {
 
     public static readonly PAGE_LENGTH: number = Number(process.env.DOCSBOT_LIMIT_CHARS);
 
-    public static getEmbed(doc: Doc, page: number): RichEmbed {
+    public static getEmbed(doc: Doc, page: number, searchedFor: string): RichEmbed {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io url', `https://devdocs.io/${ doc.name.replace(/\./g, '/') }/${ doc.key }`)
+                              .addField('devdocs.io url', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
@@ -82,7 +82,7 @@ export class DocsCommand extends CommandBase {
 
             if (result) {
 
-                const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage));
+                const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
                 const filter = (reaction: any, user: any) => {
 
