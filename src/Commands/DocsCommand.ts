@@ -104,14 +104,14 @@ export class DocsCommand extends CommandBase {
                         if (reaction.emoji.name === '⏩') {
 
                             currentPage++;
-                            reaction.message.edit(DocsCommand.getEmbed(result, currentPage));
+                            reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
                         } else if (reaction.emoji.name === '⏪') {
 
                             if (currentPage > 0) {
 
                                 currentPage--;
-                                reaction.message.edit(DocsCommand.getEmbed(result, currentPage));
+                                reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
                             }
 
