@@ -6,7 +6,7 @@ export class JSONUtil {
 
     public static getByName(filename: string, name: string): Doc {
 
-        if (filename.match(/^[a-z0-9-/~._]{2,64}$/i)) {
+        if (filename.match(/^[a-z0-9-/~._]{1,64}$/i)) {
 
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
@@ -66,7 +66,7 @@ export class JSONUtil {
 
     public static getTerms(filename: string): Array<string> {
 
-        if (filename.match(/^[a-z0-9-~._]+$/i)) {
+        if (filename.match(/^[a-z0-9-/~._]{1,64}$/i)) {
 
             if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
 
