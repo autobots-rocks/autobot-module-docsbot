@@ -33,14 +33,14 @@ export class DocsCommand extends CommandBase {
         if (showPrev) {
 
             // @ts-ignore
-            await message.react('⏪');
+            await message.react('🔼');
 
         }
 
         if (showNext) {
 
             // @ts-ignore
-            await message.react('⏩');
+            await message.react('🔽');
 
         }
 
@@ -87,7 +87,7 @@ export class DocsCommand extends CommandBase {
                 const filter = (reaction: any, user: any) => {
 
                     // @ts-ignore
-                    return [ '🗑', '⏪', '⏩' ].includes(reaction.emoji.name);
+                    return [ '🗑', '🔼', '🔽' ].includes(reaction.emoji.name);
 
                 };
 
