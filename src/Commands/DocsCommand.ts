@@ -17,7 +17,7 @@ export class DocsCommand extends CommandBase {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io url', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
+                              .addField('devdocs.io urlsssss', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
@@ -82,7 +82,7 @@ export class DocsCommand extends CommandBase {
 
             if (result) {
 
-                const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
+                const message = await command.obj.channel.send(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
 
                 const filter = (reaction: any, user: any) => {
 
@@ -91,7 +91,7 @@ export class DocsCommand extends CommandBase {
 
                 };
 
-                DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
+                DocsCommand.addReactions(message, currentPage > 0, currentPage < result[0].pages);
 
                 // @ts-ignore
                 let collector = message.createReactionCollector(filter, { time: 999999 });
@@ -104,14 +104,14 @@ export class DocsCommand extends CommandBase {
                         if (reaction.emoji.name === '🔽') {
 
                             currentPage++;
-                            reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
+                            reaction.message.edit(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
 
                         } else if (reaction.emoji.name === '🔼') {
 
                             if (currentPage > 0) {
 
                                 currentPage--;
-                                reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
+                                reaction.message.edit(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
 
                             }
 
@@ -121,7 +121,7 @@ export class DocsCommand extends CommandBase {
 
                         }
 
-                        DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+                        DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result[0].pages);
 
                     }
 

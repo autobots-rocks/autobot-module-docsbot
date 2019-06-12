@@ -4,7 +4,7 @@ import { Doc }   from './Doc';
 
 export class JSONUtil {
 
-    public static getByName(filename: string, name: string): Doc {
+    public static getByName(filename: string, name: string): Doc[] {
 
         if (filename.match(/^[a-z0-9-/~._]{1,64}$/i)) {
 
@@ -27,32 +27,38 @@ export class JSONUtil {
 
                     });
 
-                    const result = fuse.search(name);
+                    const results = fuse.search(name);
 
-                    if (result && result.length > 0) {
+                    if (results && results.length > 0) {
 
-                        const key = result[ 0 ].name;
+                        let processedResults = results.slice(0, 5).map(result => {
 
-                        let pages: number = 0;
+                            const key = result.name;
 
-                        if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+                            let pages: number = 0;
 
-                            pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+                            if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
 
-                        } else {
+                                pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
 
-                            pages = 0;
+                            } else {
 
-                        }
+                                pages = 0;
 
-                        return {
+                            }
 
-                            key,
-                            name,
-                            doc: json[ key ],
-                            pages
+                            return {
 
-                        };
+                                key,
+                                name,
+                                doc: json[ key ],
+                                pages
+
+                            }
+
+                        });
+
+                        return processedResults;
 
                     }
 
