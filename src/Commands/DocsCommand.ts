@@ -117,7 +117,11 @@ export class DocsCommand extends CommandBase {
 
                         } else if (reaction.emoji.name === '🗑') {
 
-                            reaction.message.delete();
+                            if (reaction.me) {
+
+                                reaction.message.delete();
+
+                            }
 
                         }
 
