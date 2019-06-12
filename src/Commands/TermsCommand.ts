@@ -16,9 +16,9 @@ export class TermsCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: '#terms',
+            name: `${ process.env.DOCSBOT_PREFIX_TERMS }`,
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_TERMS', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [
 
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
@@ -44,19 +44,19 @@ export class TermsCommand extends CommandBase {
 
             const str = result.join(', ');
 
-            for (let i = 0; i < str.length; i += 2048) {
+            for (let i = 0; i < str.length; i += 2000) {
 
                 command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
                                                         .setColor(3447003)
-                                                        .setDescription(result.join(', ').substring(i, 2048)));
+                                                        .setDescription(result.join(', ').substring(i, 2000)));
 
             }
 
         } else {
 
-            // command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-            //                                         .setColor(3447003)
-            //                                         .setDescription(`Could not find any results for "${ command.arguments[ 0 ].name }`));
+            command.obj.channel.send(new RichEmbed().setTitle('devdocs')
+                                                    .setColor(15158332)
+                                                    .setDescription(`Could not find any results for "${ command.arguments[ 0 ].name }`));
 
         }
 

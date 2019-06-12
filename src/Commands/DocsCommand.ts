@@ -13,11 +13,11 @@ export class DocsCommand extends CommandBase {
 
     public static readonly PAGE_LENGTH: number = Number(process.env.DOCSBOT_LIMIT_CHARS);
 
-    public static getEmbed(doc: Doc, page: number): RichEmbed {
+    public static getEmbed(doc: Doc, page: number, searchedFor: string): RichEmbed {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io urlssssss', `https://devdocs.io/javascript/${ doc.key }`)
+                              .addField('devdocs.io url', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
@@ -33,14 +33,14 @@ export class DocsCommand extends CommandBase {
         if (showPrev) {
 
             // @ts-ignore
-            await message.react('⏪');
+            await message.react('🔼');
 
         }
 
         if (showNext) {
 
             // @ts-ignore
-            await message.react('⏩');
+            await message.react('🔽');
 
         }
 
@@ -56,9 +56,9 @@ export class DocsCommand extends CommandBase {
             event: Event.MESSAGE,
             name: '*',
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_SEARCH', 'DOCSBOT_PREFIX_TERMS', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [ process.env.DOCSBOT_ADMIN_ROLE_NAME ],
-            description: '#javascript <search term>'
+            description: ';language <search term>'
 
         });
 
@@ -74,19 +74,20 @@ export class DocsCommand extends CommandBase {
 
         let currentPage: number = 0;
 
-        const lang = command.command.split('#');
+        const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{1,32})\\s+([a-z0-9-/~._]{1,64})$'));
 
-        if (lang[ 1 ]) {
-            const result = JSONUtil.getByName(lang[ 1 ], command.arguments[ 0 ].name);
+        if (matches && matches.length === 3) {
 
-            if (result !== null) {
+            const result = JSONUtil.getByName(matches[ 1 ], matches[ 2 ]);
 
-                const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage));
+            if (result) {
+
+                const message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
                 const filter = (reaction: any, user: any) => {
 
                     // @ts-ignore
-                    return [ '🗑', '⏪', '⏩' ].includes(reaction.emoji.name);
+                    return [ '🗑', '🔼', '🔽' ].includes(reaction.emoji.name);
 
                 };
 
@@ -100,17 +101,17 @@ export class DocsCommand extends CommandBase {
 
                     if (reaction.users.size === 2 && reaction.me) {
 
-                        if (reaction.emoji.name === '⏩') {
+                        if (reaction.emoji.name === '🔽') {
 
                             currentPage++;
-                            reaction.message.edit(DocsCommand.getEmbed(result, currentPage));
+                            reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
-                        } else if (reaction.emoji.name === '⏪') {
+                        } else if (reaction.emoji.name === '🔼') {
 
                             if (currentPage > 0) {
 
                                 currentPage--;
-                                reaction.message.edit(DocsCommand.getEmbed(result, currentPage));
+                                reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches[ 1 ]));
 
                             }
 
@@ -127,11 +128,12 @@ export class DocsCommand extends CommandBase {
                 });
 
             } else {
+
                 command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                         .setColor(15158332)
-                                                         .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
-                                                                          for the language "${lang[ 1 ]}".
-                                                                          To see a list of all possible terms, use the command \`#terms ${lang [ 1 ]}\`.
+                                                        .setColor(15158332)
+                                                        .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
+                                                                          for the language "${ matches[ 1 ] }".
+                                                                          To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
                                                                          `));
 
             }
