@@ -4,7 +4,7 @@ import { Doc }   from './Doc';
 
 export class JSONUtil {
 
-    public static getByName(filename: string, name: string): Doc {
+    public static getByName(filename: string, name: string): Doc[] {
 
         if (filename.match(/^[a-z0-9-/~._]{1,64}$/i)) {
 
@@ -27,32 +27,40 @@ export class JSONUtil {
 
                     });
 
-                    const result = fuse.search(name);
+                    const results = fuse.search(name);
 
-                    if (result && result.length > 0) {
+                    if (results && results.length > 0) {
 
-                        const key = result[ 0 ].name;
+                        const limit = Number(process.env.DOCSBOT_LIMIT_RESULTS);
 
-                        let pages: number = 0;
+                        let processedResults = results.slice(0,  limit).map(result => {
 
-                        if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
+                            const key = result.name;
 
-                            pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
+                            let pages: number = 0;
 
-                        } else {
+                            if (json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS) > 0) {
 
-                            pages = 0;
+                                pages = Math.floor(json[ key ].length / Number(process.env.DOCSBOT_LIMIT_CHARS)) - 1;
 
-                        }
+                            } else {
 
-                        return {
+                                pages = 0;
 
-                            key,
-                            name,
-                            doc: json[ key ],
-                            pages
+                            }
 
-                        };
+                            return {
+
+                                key,
+                                name,
+                                doc: json[ key ],
+                                pages
+
+                            }
+
+                        });
+
+                        return processedResults;
 
                     }
 
