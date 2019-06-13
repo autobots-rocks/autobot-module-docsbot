@@ -17,7 +17,7 @@ export class DocsCommand extends CommandBase {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io urlsssss', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
+                              .addField('devdocs.io urls', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
@@ -67,7 +67,7 @@ export class DocsCommand extends CommandBase {
     /**
      * Called when a command matches config.name.
      *
-     * @param command Parsed out commamd
+     * @param command Parsed out command
      *
      */
     public async run(command: CommandParser) {
@@ -82,54 +82,15 @@ export class DocsCommand extends CommandBase {
 
             if (result) {
 
-                const message = await command.obj.channel.send(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
+                if (result[0].key === matches[2]) {
 
-                const filter = (reaction: any, user: any) => {
+                    DocsCommand.sendDoc(command, result[0], currentPage, matches[1]);
 
-                    // @ts-ignore
-                    return [ '🗑', '🔼', '🔽' ].includes(reaction.emoji.name);
+                } else {
 
-                };
+                    DocsCommand.sendResults(command, result, matches);
 
-                DocsCommand.addReactions(message, currentPage > 0, currentPage < result[0].pages);
-
-                // @ts-ignore
-                let collector = message.createReactionCollector(filter, { time: 999999 });
-
-                // @ts-ignore
-                collector.on('collect', async (reaction, collector) => {
-
-                    if (reaction.users.size === 2 && reaction.me) {
-
-                        if (reaction.emoji.name === '🔽') {
-
-                            currentPage++;
-                            reaction.message.edit(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
-
-                        } else if (reaction.emoji.name === '🔼') {
-
-                            if (currentPage > 0) {
-
-                                currentPage--;
-                                reaction.message.edit(DocsCommand.getEmbed(result[0], currentPage, matches[ 1 ]));
-
-                            }
-
-                        } else if (reaction.emoji.name === '🗑') {
-
-                            if (reaction.me) {
-
-                                reaction.message.delete();
-
-                            }
-
-                        }
-
-                        DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result[0].pages);
-
-                    }
-
-                });
+                }
 
             } else {
 
@@ -145,5 +106,146 @@ export class DocsCommand extends CommandBase {
         }
 
     }
+
+    /**
+     * Send a document, along with emojis
+     *
+     * @param command Parsed out command
+     * @param result Document to send
+     * @param currentPage Index representation of location the document
+     * @param matches Language and term names
+     * @param message? If a message has already been sent, pass it here to overwrite instead
+     */
+    public static async sendDoc(command: CommandParser, result: Doc, currentPage: number, matches: string, message?: any) {
+
+        if (message) {
+            message = await message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+        } else {
+            message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches));
+        }
+
+        const filter = (reaction: any, user: any) => {
+
+            // @ts-ignore
+            return [ '🗑', '🔼', '🔽' ].includes(reaction.emoji.name);
+
+        };
+
+        DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
+
+        // @ts-ignore
+        let collector = message.createReactionCollector(filter, { time: 999999 });
+
+        // @ts-ignore
+        collector.on('collect', async (reaction, collector) => {
+
+            if (reaction.users.size === 2 && reaction.me) {
+
+                if (reaction.emoji.name === '🔽') {
+
+                    currentPage++;
+                    reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+
+                } else if (reaction.emoji.name === '🔼') {
+
+                    if (currentPage > 0) {
+
+                        currentPage--;
+                        reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+
+                    }
+
+                } else if (reaction.emoji.name === '🗑') {
+
+                    if (reaction.me) {
+
+                        reaction.message.delete();
+
+                    }
+
+                }
+
+                DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+
+            }
+
+        });
+
+    }
+
+    /**
+     * Sends results from search, with emojis to choose which document
+     *
+     * @param command Parsed out command
+     * @param result Document to send
+     * @param matches Language and term names
+     *
+     */
+    public static async sendResults(command: CommandParser, results: Doc[], matches: string[]) {
+
+        const emojiNumbers = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].slice(0, results.length);
+
+        const list = results.map((result, index) => emojiNumbers[index] + " **" + result.key + "**").join('\n');
+
+        const body = `Sorry, an exact match for the term "${ matches[2] }", wasn't found.
+        
+                      Here are the closest matches:
+                      ${list}
+                      
+                      Select the correct term by reacting with the corresponding emoji. 
+                     `;
+
+        const message = await command.obj.channel.send(new RichEmbed()
+                                                                .setTitle('Search Results')
+                                                                .setColor(3447003)
+                                                                .setDescription(body)
+                                                      );
+
+        // @ts-ignore
+        await message.react('🗑');
+
+        for (let emoji of emojiNumbers) {
+
+            // @ts-ignore
+            await message.react(emoji);
+
+        }
+
+        const filter = (reaction: any, user: any) => {
+
+            emojiNumbers.push('🗑');
+
+            // @ts-ignore
+            return emojiNumbers.includes(reaction.emoji.name);
+
+        };
+
+        // @ts-ignore
+        let collector = message.createReactionCollector(filter, { time: 999999 });
+
+        // @ts-ignore
+        collector.on('collect', async (reaction, collector) => {
+
+            if (reaction.users.size === 2 && reaction.me) {
+
+                // @ts-ignore
+                if (emojiNumbers.includes(reaction.emoji.name)) {
+
+                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], message);
+
+                } else if (reaction.emoji.name === '🗑') {
+
+                    reaction.message.delete();
+
+                }
+
+
+            }
+
+        });
+
+    }
+
+
 
 }

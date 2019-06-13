@@ -31,7 +31,9 @@ export class JSONUtil {
 
                     if (results && results.length > 0) {
 
-                        let processedResults = results.slice(0, 5).map(result => {
+                        const limit = Number(process.env.DOCSBOT_LIMIT_RESULTS);
+
+                        let processedResults = results.slice(0,  limit).map(result => {
 
                             const key = result.name;
 
