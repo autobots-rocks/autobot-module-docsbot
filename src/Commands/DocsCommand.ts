@@ -82,9 +82,9 @@ export class DocsCommand extends CommandBase {
 
             if (result) {
 
-                if (result[0].key === matches[2]) {
+                if (result[ 0 ].key === matches[ 2 ]) {
 
-                    DocsCommand.sendDoc(command, result[0], currentPage, matches[1]);
+                    DocsCommand.sendDoc(command, result[ 0 ], currentPage, matches[ 1 ]);
 
                 } else {
 
@@ -146,6 +146,8 @@ export class DocsCommand extends CommandBase {
                     currentPage++;
                     reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
 
+                    DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+
                 } else if (reaction.emoji.name === '🔼') {
 
                     if (currentPage > 0) {
@@ -154,6 +156,8 @@ export class DocsCommand extends CommandBase {
                         reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
 
                     }
+
+                    DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
                 } else if (reaction.emoji.name === '🗑') {
 
@@ -164,8 +168,6 @@ export class DocsCommand extends CommandBase {
                     }
 
                 }
-
-                DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
             }
 
@@ -183,23 +185,23 @@ export class DocsCommand extends CommandBase {
      */
     public static async sendResults(command: CommandParser, results: Doc[], matches: string[]) {
 
-        const emojiNumbers = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].slice(0, results.length);
+        const emojiNumbers = [ '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟' ].slice(0, results.length);
 
-        const list = results.map((result, index) => emojiNumbers[index] + " **" + result.key + "**").join('\n');
+        const list = results.map((result, index) => emojiNumbers[ index ] + " **" + result.key + "**").join('\n');
 
-        const body = `Sorry, an exact match for the term "${ matches[2] }", wasn't found.
+        const body = `Sorry, an exact match for the term "${ matches[ 2 ] }", wasn't found.
         
                       Here are the closest matches:
-                      ${list}
+                      ${ list }
                       
                       Select the correct term by reacting with the corresponding emoji. 
                      `;
 
         const message = await command.obj.channel.send(new RichEmbed()
-                                                                .setTitle('Search Results')
-                                                                .setColor(3447003)
-                                                                .setDescription(body)
-                                                      );
+            .setTitle('Search Results')
+            .setColor(3447003)
+            .setDescription(body)
+        );
 
         // @ts-ignore
         await message.react('🗑');
@@ -231,7 +233,7 @@ export class DocsCommand extends CommandBase {
                 // @ts-ignore
                 if (emojiNumbers.includes(reaction.emoji.name)) {
 
-                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], message);
+                    DocsCommand.sendDoc(command, results[ emojiNumbers.indexOf(reaction.emoji.name) ], 0, matches[ 1 ], message);
 
                 } else if (reaction.emoji.name === '🗑') {
 
@@ -245,7 +247,6 @@ export class DocsCommand extends CommandBase {
         });
 
     }
-
 
 
 }
