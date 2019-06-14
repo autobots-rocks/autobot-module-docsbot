@@ -33,7 +33,7 @@ export class JSONUtil {
 
                         const limit = Number(process.env.DOCSBOT_LIMIT_RESULTS);
 
-                        let processedResults = results.slice(0,  limit).map(result => {
+                        let processedResults = results.slice(0, limit).map(result => {
 
                             const key = result.name;
 
@@ -56,7 +56,7 @@ export class JSONUtil {
                                 doc: json[ key ],
                                 pages
 
-                            }
+                            };
 
                         });
 
@@ -116,6 +116,46 @@ export class JSONUtil {
             }
 
             return objects;
+
+        }
+
+    }
+
+    public static getFile(filename: string): any {
+
+        if (fs.existsSync(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`)) {
+
+            return require(`${ process.env.DOCSBOT_SAVE_PATH }/${ filename }.json`);
+
+        }
+
+    }
+
+    public static getLanguages(): Array<string> {
+
+        if (fs.existsSync('../conf/languages.json')) {
+
+            return require('../conf/languages.json').languages;
+
+        }
+
+    }
+
+    public static getLanguageExists(language: string): boolean {
+
+        if (fs.existsSync('../conf/languages.json')) {
+
+            const languages = require('../conf/languages.json').languages;
+
+            for (let i = 0; i < languages.length; i++) {
+
+                if (languages[ i ] == language) {
+
+                    return true;
+
+                }
+
+            }
 
         }
 

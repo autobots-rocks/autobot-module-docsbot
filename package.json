@@ -1,6 +1,6 @@
 {
     "name": "@autobot/module-docsbot",
-    "version": "1.0.183",
+    "version": "1.0.188",
     "description": "",
     "main": "dist/index",
     "typings": "dist/index",
@@ -13,7 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@autobot/common": "^1.1.23",
+        "@autobot/common": "^1.1.45",
         "axios": "^0.19.0",
         "discord.js": "^11.4.2",
         "dotenv": "^7.0.0",
