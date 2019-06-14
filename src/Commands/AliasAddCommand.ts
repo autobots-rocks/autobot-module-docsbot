@@ -58,7 +58,7 @@ export class AliasAddCommand extends CommandBase {
         } else {
 
             command.obj.channel.send(new RichEmbed().setTitle('docbot alias add: error')
-                                                    .setColor(3447003)
+                                                    .setColor(15158332)
                                                     .setDescription(`
                                                     
                                                         Langauge pack "${ command.namedarguments.language }" could not be located.

@@ -56,8 +56,8 @@ export class UpdateCommand extends CommandBase {
         } else {
 
             command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                    .setColor(3447003)
-                                                    .setDescription(`Could not find any results for "${ command.arguments[ 0 ].name }`));
+                                                    .setColor(15158332)
+                                                    .setDescription(`Could not find any language "${ command.arguments[ 0 ].name }"`));
 
         }
 
