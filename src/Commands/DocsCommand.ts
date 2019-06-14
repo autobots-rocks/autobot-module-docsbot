@@ -96,10 +96,10 @@ export class DocsCommand extends CommandBase {
 
                 command.obj.channel.send(new RichEmbed().setTitle('devdocs')
                                                         .setColor(15158332)
-                                                        .setDescription(`Sorry, couldn't find the term "${ command.arguments[ 0 ].name }"\
-                                                                          for the language "${ matches[ 1 ] }".
-                                                                          To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
-                                                                         `));
+                                                        .setDescription(`Sorry, couldn't find any search results for "${ command.arguments[ 0 ].name }"\
+                                                                         in the language "${ matches[ 1 ] }".
+                                                                         To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
+                                                                        `));
 
             }
 
@@ -229,13 +229,13 @@ export class DocsCommand extends CommandBase {
             if (reaction.users.size === 2 && reaction.me) {
 
                 // @ts-ignore
-                if (emojiNumbers.includes(reaction.emoji.name)) {
-
-                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], message);
-
-                } else if (reaction.emoji.name === '🗑') {
+                if (reaction.emoji.name === '🗑') {
 
                     reaction.message.delete();
+
+                } else {
+
+                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], message);
 
                 }
 
