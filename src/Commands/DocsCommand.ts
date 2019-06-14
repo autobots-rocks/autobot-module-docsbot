@@ -165,8 +165,8 @@ export class DocsCommand extends CommandBase {
 
                     }
 
-                    DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
-
+                    DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
+                    
                 } else if (reaction.emoji.name === '🗑' && !messagePassed) {
 
                     if (reaction.me) {
