@@ -84,11 +84,11 @@ export class DocsCommand extends CommandBase {
 
                 if (result[ 0 ].key === matches[ 2 ]) {
 
-                    DocsCommand.sendDoc(command, result[ 0 ], currentPage, matches[ 1 ]);
+                    DocsCommand.sendDoc(command, result[ 0 ], currentPage, matches[ 1 ], command.obj.author.id);
 
                 } else {
 
-                    DocsCommand.sendResults(command, result, matches);
+                    DocsCommand.sendResults(command, result, matches, command.obj.author.id);
 
                 }
 
@@ -114,9 +114,11 @@ export class DocsCommand extends CommandBase {
      * @param result Document to send
      * @param currentPage Index representation of location the document
      * @param matches Language and term names
+     * @param originID ID for who sent the command message
      * @param message? If a message has already been sent, pass it here to overwrite instead
+     *
      */
-    public static async sendDoc(command: CommandParser, result: Doc, currentPage: number, matches: string, message?: any) {
+    public static async sendDoc(command: CommandParser, result: Doc, currentPage: number, matches: string, originID: string, message?: any) {
 
         let messagePassed: boolean;
 
@@ -147,7 +149,7 @@ export class DocsCommand extends CommandBase {
         // @ts-ignore
         collector.on('collect', async (reaction, collector) => {
 
-            if (reaction.users.size === 2 && reaction.me) {
+            if (reaction.users.size >= 2 && reaction.me) {
 
                 if (reaction.emoji.name === '🔽') {
 
@@ -166,8 +168,8 @@ export class DocsCommand extends CommandBase {
                     }
 
                     DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
-                    
-                } else if (reaction.emoji.name === '🗑' && !messagePassed) {
+
+                } else if (reaction.users.has(originID) && reaction.emoji.name === '🗑' && !messagePassed) {
 
                     if (reaction.me) {
 
@@ -187,11 +189,12 @@ export class DocsCommand extends CommandBase {
      * Sends results from search, with emojis to choose which document
      *
      * @param command Parsed out command
-     * @param result Document to send
+     * @param results Document to send
      * @param matches Language and term names
+     * @param originID ID for who sent the command message
      *
      */
-    public static async sendResults(command: CommandParser, results: Doc[], matches: string[]) {
+    public static async sendResults(command: CommandParser, results: Doc[], matches: string[], originID: string) {
 
         const emojiNumbers = [ '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟' ].slice(0, results.length);
 
@@ -236,7 +239,7 @@ export class DocsCommand extends CommandBase {
         // @ts-ignore
         collector.on('collect', async (reaction, collector) => {
 
-            if (reaction.users.size === 2 && reaction.me) {
+            if (reaction.users.has(originID) && reaction.users.size >= 2 && reaction.me) {
 
                 // @ts-ignore
                 if (reaction.emoji.name === '🗑') {
@@ -245,7 +248,7 @@ export class DocsCommand extends CommandBase {
 
                 } else {
 
-                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], message);
+                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], originID, message);
 
                 }
 
