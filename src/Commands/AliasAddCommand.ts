@@ -19,7 +19,7 @@ export class AliasAddCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: `${ process.env.DOCSBOT_PREFIX_CHEAT }`,
+            name: `${ process.env.DOCSBOT_PREFIX_ALIAS }`,
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_PREFIX_ALIAS' ],
             roles: [
@@ -48,7 +48,7 @@ export class AliasAddCommand extends CommandBase {
             aliasesConfig.aliases[ command.namedarguments.language ] = command.namedarguments.alias;
 
             Config.write('docsbot_aliases', aliasesConfig);
-            
+
             command.obj.channel.send(new RichEmbed().setTitle('docsbot alias add')
                                                     .setColor(3447003)
                                                     .addField('language', command.namedarguments.language, true)
