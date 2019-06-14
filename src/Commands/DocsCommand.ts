@@ -118,10 +118,18 @@ export class DocsCommand extends CommandBase {
      */
     public static async sendDoc(command: CommandParser, result: Doc, currentPage: number, matches: string, message?: any) {
 
+        let messagePassed: boolean;
+
         if (message) {
+
             message = await message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+            messagePassed = true;
+
         } else {
+
             message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches));
+            messagePassed = false;
+
         }
 
         const filter = (reaction: any, user: any) => {
@@ -159,7 +167,7 @@ export class DocsCommand extends CommandBase {
 
                     DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
-                } else if (reaction.emoji.name === '🗑') {
+                } else if (reaction.emoji.name === '🗑' && !messagePassed) {
 
                     if (reaction.me) {
 
