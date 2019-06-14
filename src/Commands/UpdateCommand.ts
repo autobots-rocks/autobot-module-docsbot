@@ -39,7 +39,17 @@ export class UpdateCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        const result = await axios(`https://docs.devdocs.io/${ command.arguments[ 0 ].name }/db.json`);
+        let result;
+
+        try {
+
+            result = await axios(`https://docs.devdocs.io/${ command.arguments[ 0 ].name }/db.json`);
+
+        } catch (error) {
+
+            result = null;
+            
+        }
 
         if (result) {
 
