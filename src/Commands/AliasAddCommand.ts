@@ -2,8 +2,6 @@ import { Command, CommandBase, CommandParser, Config, Event } from '@autobot/com
 import { RichEmbed }                                          from 'discord.js';
 import { JSONUtil }                                           from '../_lib/JSONUtil';
 
-const h2m = require('h2m');
-
 /**
  * Adds an alias `;;alias javascript js`.
  */
@@ -19,6 +17,7 @@ export class AliasAddCommand extends CommandBase {
 
             event: Event.MESSAGE,
             name: `${ process.env.DOCSBOT_PREFIX_ALIAS_ADD }`,
+            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.'
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_ALIASES_CONFIG_PATH', 'DOCSBOT_PREFIX_ALIAS_ADD' ],
             roles: [
@@ -26,7 +25,21 @@ export class AliasAddCommand extends CommandBase {
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
 
             ],
-            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.'
+            params: [
+
+                {
+
+                    name: 'language',
+                    required: true
+
+                }, {
+
+                    name: 'alias',
+                    required: true
+
+                }
+
+            ]
 
         });
 

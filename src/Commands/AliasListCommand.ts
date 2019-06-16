@@ -36,7 +36,6 @@ export class AliasListCommand extends CommandBase {
      * Called when a command matches config.name.
      *
      * @param command Parsed out commamd
-     *
      */
     public async run(command: CommandParser) {
 
@@ -44,7 +43,7 @@ export class AliasListCommand extends CommandBase {
 
         if (aliases) {
 
-            const embed = new RichEmbed().setTitle('docsbot alias add')
+            const embed = new RichEmbed().setTitle('docsbot list aliases')
                                          .setColor(3447003)
                                          .setDescription(`the following language aliases are availble:`)
                                          .setFooter('https://github.com/autobots-rocks/autobot-docsbot');
@@ -67,6 +66,7 @@ export class AliasListCommand extends CommandBase {
                                                         To add an alias use \`;;aliasadd language=javascript,alias=js\`
                                                     
                                                     `));
+
         }
 
     }
