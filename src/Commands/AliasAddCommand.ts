@@ -27,7 +27,7 @@ export class AliasAddCommand extends CommandBase {
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
 
             ],
-            description: 'Adds an alias `;;alias javascript js`.'
+            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.'
 
         });
 
