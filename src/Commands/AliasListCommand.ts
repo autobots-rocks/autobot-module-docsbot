@@ -40,29 +40,22 @@ export class AliasListCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-
         let aliases = Config.load<Alias>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
-
-        // const aliases = require(process.env.DOCSBOT_ALIASES_CONFIG_PATH));
-
-        console.log(aliases);
 
         if (aliases) {
 
-            console.log(aliases);
+            const embed = new RichEmbed().setTitle('docsbot alias add')
+                                         .setColor(3447003)
+                                         .setDescription(`the following language aliases are availble:`)
+                                         .setFooter('https://github.com/autobots-rocks/autobot-docsbot');
 
-            // const embed = new RichEmbed().setTitle('docsbot alias add')
-            //                              .setColor(3447003)
-            //                              .setDescription(`the following language aliases are availble:`)
-            //                              .setFooter('https://github.com/autobots-rocks/autobot-docsbot');
-            //
-            // // for (let key in aliases) {
-            // //             //
-            // //             //     embed.addField(key, aliases[ key ], true);
-            // //             //
-            // //             // }
-            //
-            // command.obj.channel.send(embed);
+            for (let key in aliases) {
+
+                embed.addField(key, aliases[ key ], true);
+
+            }
+
+            command.obj.channel.send(embed);
 
         } else {
 
