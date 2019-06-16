@@ -7,9 +7,11 @@ export class AliasUtil {
 
         const aliases = Config.load<Alias>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
 
+        console.log(aliases);
+
         for (let key in aliases) {
 
-            if (aliases[ key ] === value) {
+            if (aliases[ key ] == value) {
 
                 return key;
 
