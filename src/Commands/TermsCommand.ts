@@ -49,7 +49,7 @@ export class TermsCommand extends CommandBase {
 
                 command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
                                                         .setColor(3447003)
-                                                        .setDescription(result.join(', ').substring(i, 2000)));
+                                                        .setDescription(result.join(', ').substr(i, 2000)));
 
             }
 
