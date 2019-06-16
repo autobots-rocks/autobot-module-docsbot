@@ -3,7 +3,7 @@ import { RichEmbed }                                          from 'discord.js';
 import { JSONUtil }                                           from '../_lib/JSONUtil';
 
 /**
- * Adds an alias `;;alias javascript js`.
+ * Adds or updates an alias `;;alias javascript js`.
  */
 @Command
 export class AliasAddCommand extends CommandBase {
@@ -17,7 +17,7 @@ export class AliasAddCommand extends CommandBase {
 
             event: Event.MESSAGE,
             name: `${ process.env.DOCSBOT_PREFIX_ALIAS_ADD }`,
-            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.',
+            description: 'Adds or updates an alias `;;aliasadd lanaguage=javascript,alias=js`.',
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_ALIASES_CONFIG_PATH', 'DOCSBOT_PREFIX_ALIAS_ADD' ],
             roles: [
