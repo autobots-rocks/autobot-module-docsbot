@@ -39,6 +39,8 @@ export class AliasListCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
+        console.log(require(process.env.DOCSBOT_ALIASES_CONFIG_PATH));
+
         let aliases = Config.load<{ [ key: string ]: string }>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
 
         if (aliases) {
