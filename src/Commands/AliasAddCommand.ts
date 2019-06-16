@@ -43,7 +43,9 @@ export class AliasAddCommand extends CommandBase {
 
         if (JSONUtil.getFile(command.namedarguments.language)) {
 
-            const aliasesConfig = Config.load<AliasesConfig>('docsbot_aliases');
+            let aliasesConfig = Config.load<AliasesConfig>(process.env.DOCSBOT_ALIASES_CONFIG_PATH, 'docsbot_aliases');
+
+            console.log(aliasesConfig);
 
             if (!aliasesConfig[ 'aliases' ]) {
 
@@ -51,9 +53,7 @@ export class AliasAddCommand extends CommandBase {
 
             }
 
-            aliasesConfig[ 'aliases' ][ command.namedarguments.language ] = command.namedarguments.alias;
-
-            Config.write('docsbot_aliases', aliasesConfig);
+            Config.write(process.env.DOCSBOT_ALIASES_CONFIG_PATH, command.namedarguments.language, command.namedarguments.alias);
 
             command.obj.channel.send(new RichEmbed().setTitle('docsbot alias add')
                                                     .setColor(3447003)
