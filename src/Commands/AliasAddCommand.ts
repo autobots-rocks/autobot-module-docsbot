@@ -17,7 +17,7 @@ export class AliasAddCommand extends CommandBase {
 
             event: Event.MESSAGE,
             name: `${ process.env.DOCSBOT_PREFIX_ALIAS_ADD }`,
-            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.'
+            description: 'Adds an alias `;;aliasadd lanaguage=javascript,alias=js`.',
             group: 'docs',
             requiredEnvVars: [ 'DOCSBOT_ALIASES_CONFIG_PATH', 'DOCSBOT_PREFIX_ALIAS_ADD' ],
             roles: [
