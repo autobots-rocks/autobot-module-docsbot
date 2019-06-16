@@ -33,7 +33,7 @@ export class AliasDeleteCommand extends CommandBase {
 
                 {
 
-                    name: 'alias',
+                    name: 'language',
                     required: true
 
                 }
@@ -51,11 +51,11 @@ export class AliasDeleteCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        if (Config.remove(process.env.DOCSBOT_ALIASES_CONFIG_PATH, command.namedarguments.alias)) {
+        if (Config.remove(process.env.DOCSBOT_ALIASES_CONFIG_PATH, command.namedarguments.language)) {
 
             command.obj.channel.send(new RichEmbed().setTitle('docsbot alias delete: success')
                                                     .setColor(3447003)
-                                                    .setDescription(`alias "${ command.namedarguments.alias }" successfuly deleted!`));
+                                                    .setDescription(`alias for the language "${ command.namedarguments.language }" successfuly deleted!`));
 
         } else {
 
@@ -63,7 +63,7 @@ export class AliasDeleteCommand extends CommandBase {
                                                     .setColor(15158332)
                                                     .setDescription(`
                                                     
-                                                        Alias "${ command.namedarguments.alias }" could not be located.
+                                                        Alias for the language "${ command.namedarguments.language }" could not be located.
                                                         To view aliases use \`;;aliaslist\`.
                                                     
                                                     `));
