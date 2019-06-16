@@ -1,5 +1,6 @@
 import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
 import { RichEmbed }                                  from 'discord.js';
+import { AliasUtil }                                  from '../_lib/AliasUtil';
 import { JSONUtil }                                   from '../_lib/JSONUtil';
 
 /**
@@ -38,7 +39,7 @@ export class TermsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        const result = JSONUtil.getTerms(command.arguments[ 0 ].name);
+        const result = JSONUtil.getTerms(command.arguments[ 0 ].name) || JSONUtil.getTerms(AliasUtil.getKeyByValue(command.arguments[ 0 ].name));
 
         if (result) {
 
