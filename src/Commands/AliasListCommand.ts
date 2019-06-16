@@ -43,6 +43,8 @@ export class AliasListCommand extends CommandBase {
 
         if (aliases) {
 
+            console.log(aliases);
+
             const embed = new RichEmbed().setTitle('docsbot alias add')
                                          .setColor(3447003)
                                          .setDescription(`the following language aliases are availble:`)
