@@ -1,4 +1,5 @@
 export * from './Commands/AliasAddCommand';
+export * from './Commands/AliasListCommand';
 export * from './Commands/Cheat.shCommand';
 export * from './Commands/DocsCommand';
 export * from './Commands/HelpCommand';

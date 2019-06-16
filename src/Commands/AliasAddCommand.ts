@@ -1,6 +1,6 @@
 import { Command, CommandBase, CommandParser, Config, Event } from '@autobot/common';
 import { RichEmbed }                                          from 'discord.js';
-import { AliasesConfig }                                      from '../_lib/AliasesConfig';
+import { Alias }                                              from '../_lib/Alias';
 import { JSONUtil }                                           from '../_lib/JSONUtil';
 
 const h2m = require('h2m');
@@ -19,9 +19,9 @@ export class AliasAddCommand extends CommandBase {
         super({
 
             event: Event.MESSAGE,
-            name: `${ process.env.DOCSBOT_PREFIX_ALIAS }`,
+            name: `${ process.env.DOCSBOT_PREFIX_ALIAS_ADD }`,
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_PREFIX_ALIAS' ],
+            requiredEnvVars: [ 'DOCSBOT_ALIASES_CONFIG_PATH', 'DOCSBOT_PREFIX_ALIAS_ADD' ],
             roles: [
 
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
@@ -43,7 +43,7 @@ export class AliasAddCommand extends CommandBase {
 
         if (JSONUtil.getFile(command.namedarguments.language)) {
 
-            let aliasesConfig = Config.load<AliasesConfig>(process.env.DOCSBOT_ALIASES_CONFIG_PATH, 'docsbot_aliases');
+            let aliasesConfig = Config.load<Alias>(process.env.DOCSBOT_ALIASES_CONFIG_PATH, 'docsbot_aliases');
 
             console.log(aliasesConfig);
 
