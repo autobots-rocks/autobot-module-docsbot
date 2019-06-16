@@ -1,6 +1,5 @@
 import { Command, CommandBase, CommandParser, Config, Event } from '@autobot/common';
 import { RichEmbed }                                          from 'discord.js';
-import { JSONUtil }                                           from '../_lib/JSONUtil';
 
 const h2m = require('h2m');
 
@@ -40,13 +39,13 @@ export class AliasListCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        if (JSONUtil.getFile(command.namedarguments.language)) {
+        let aliases = Config.load<{ [ key: string ]: string }>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
 
-            let aliases = Config.load<{ [ key: string ]: string }>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
+        if (aliases) {
 
             const embed = new RichEmbed().setTitle('docsbot alias add')
                                          .setColor(3447003)
-                                         .setDescription(`language "${ command.namedarguments.language }" successfuly aliased!`)
+                                         .setDescription(`the following language aliases are availble:`)
                                          .setFooter('https://github.com/autobots-rocks/autobot-docsbot');
 
             for (let key in aliases) {
