@@ -2,6 +2,7 @@ import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
 import { RichEmbed }                                  from 'discord.js';
 import { Doc }                                        from '../_lib/Doc';
 import { JSONUtil }                                   from '../_lib/JSONUtil';
+import { EmedUtil }                                   from '../_lib/EmedUtil';
 
 const h2m = require('h2m');
 
@@ -13,7 +14,7 @@ export class DocsCommand extends CommandBase {
 
     public static readonly PAGE_LENGTH: number = Number(process.env.DOCSBOT_LIMIT_CHARS);
 
-    public static getEmbed(doc: Doc, page: number, searchedFor: string): RichEmbed {
+    public static getEmbedDoc(doc: Doc, page: number, searchedFor: string): RichEmbed {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
@@ -72,8 +73,6 @@ export class DocsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        let currentPage: number = 0;
-
         const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{1,32})\\s+([a-z0-9-/~._]{1,64})$'));
 
         if (matches && matches.length === 3) {
@@ -84,22 +83,22 @@ export class DocsCommand extends CommandBase {
 
                 if (result[ 0 ].key === matches[ 2 ]) {
 
-                    DocsCommand.sendDoc(command, result[ 0 ], currentPage, matches[ 1 ], command.obj.author.id);
+                    DocsCommand.sendDoc(command, result[ 0 ], matches);
 
                 } else {
 
-                    DocsCommand.sendResults(command, result, matches, command.obj.author.id);
+                    DocsCommand.sendResults(command, result, matches);
 
                 }
 
             } else {
 
-                command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                        .setColor(15158332)
-                                                        .setDescription(`Sorry, couldn't find any search results for "${ command.arguments[ 0 ].name }"\
-                                                                         in the language "${ matches[ 1 ] }".
-                                                                         To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
-                                                                        `));
+                let description = `Sorry, couldn't find any search results for "${ command.arguments[ 0 ].name }"\
+                                   in the language "${ matches[ 1 ] }".
+                                   To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
+                                  `;
+
+                command.obj.channel.send(EmedUtil.getEmbedBasic('devdocs', 15158332, description));
 
             }
 
@@ -112,24 +111,23 @@ export class DocsCommand extends CommandBase {
      *
      * @param command Parsed out command
      * @param result Document to send
-     * @param currentPage Index representation of location the document
      * @param matches Language and term names
-     * @param originID ID for who sent the command message
      * @param message? If a message has already been sent, pass it here to overwrite instead
      *
      */
-    public static async sendDoc(command: CommandParser, result: Doc, currentPage: number, matches: string, originID: string, message?: any) {
+    public static async sendDoc(command: CommandParser, result: Doc, matches: string[], message?: any) {
 
         let messagePassed: boolean;
+        let currentPage: number = 0;
 
         if (message) {
 
-            message = await message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+            message = await message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
             messagePassed = true;
 
         } else {
 
-            message = await command.obj.channel.send(DocsCommand.getEmbed(result, currentPage, matches));
+            message = await command.obj.channel.send(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
             messagePassed = false;
 
         }
@@ -154,7 +152,7 @@ export class DocsCommand extends CommandBase {
                 if (reaction.emoji.name === '🔽') {
 
                     currentPage++;
-                    reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+                    reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
 
                     DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
@@ -163,13 +161,13 @@ export class DocsCommand extends CommandBase {
                     if (currentPage > 0) {
 
                         currentPage--;
-                        reaction.message.edit(DocsCommand.getEmbed(result, currentPage, matches));
+                        reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
 
                     }
 
                     DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
 
-                } else if (reaction.users.has(originID) && reaction.emoji.name === '🗑' && !messagePassed) {
+                } else if (reaction.users.has(command.obj.author.id) && reaction.emoji.name === '🗑' && !messagePassed) {
 
                     if (reaction.me) {
 
@@ -191,28 +189,24 @@ export class DocsCommand extends CommandBase {
      * @param command Parsed out command
      * @param results Document to send
      * @param matches Language and term names
-     * @param originID ID for who sent the command message
      *
      */
-    public static async sendResults(command: CommandParser, results: Doc[], matches: string[], originID: string) {
+    public static async sendResults(command: CommandParser, results: Doc[], matches: string[]) {
 
         const emojiNumbers = [ '1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟' ].slice(0, results.length);
 
         const list = results.map((result, index) => emojiNumbers[ index ] + " **" + result.key + "**").join('\n');
 
-        const body = `Sorry, an exact match for the term "${ matches[ 2 ] }", wasn't found.
-        
-                      Here are the closest matches:
-                      ${ list }
-                      
-                      Select the correct term by reacting with the corresponding emoji. 
-                     `;
+        const description = `Sorry, an exact match for the term "${ matches[ 2 ] }", wasn't found.
+            
+                             Here are the closest matches:
+                             ${ list }
+                          
+                             Select the correct term by reacting with the corresponding emoji. 
+                            `;
 
-        const message = await command.obj.channel.send(new RichEmbed()
-            .setTitle('Search Results')
-            .setColor(3447003)
-            .setDescription(body)
-        );
+        const message = await command.obj.channel.send(EmedUtil.getEmbedBasic('devdocs', 3447003, description));
+
 
         // @ts-ignore
         await message.react('🗑');
@@ -239,7 +233,7 @@ export class DocsCommand extends CommandBase {
         // @ts-ignore
         collector.on('collect', async (reaction, collector) => {
 
-            if (reaction.users.has(originID) && reaction.users.size >= 2 && reaction.me) {
+            if (reaction.users.has(command.obj.author.id)) {
 
                 // @ts-ignore
                 if (reaction.emoji.name === '🗑') {
@@ -248,7 +242,7 @@ export class DocsCommand extends CommandBase {
 
                 } else {
 
-                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], 0, matches[1], originID, message);
+                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], matches, message);
 
                 }
 

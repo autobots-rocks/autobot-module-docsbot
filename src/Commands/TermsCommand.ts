@@ -56,7 +56,7 @@ export class TermsCommand extends CommandBase {
 
             command.obj.channel.send(new RichEmbed().setTitle('devdocs')
                                                     .setColor(15158332)
-                                                    .setDescription(`Could not find any results for "${ command.arguments[ 0 ].name }`));
+                                                    .setDescription(`Could not find any terms for language "${ command.arguments[ 0 ].name }"`));
 
         }
 

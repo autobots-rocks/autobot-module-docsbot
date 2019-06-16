@@ -67,7 +67,7 @@ export class HelpCommand extends CommandBase {
         } else {
 
             command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                    .setColor(3447003)
+                                                    .setColor(15158332)
                                                     .setDescription(`Could not list commands directory!`));
 
         }
