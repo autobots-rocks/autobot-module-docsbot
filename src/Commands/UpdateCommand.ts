@@ -48,7 +48,7 @@ export class UpdateCommand extends CommandBase {
         } catch (error) {
 
             result = null;
-            
+
         }
 
         if (result) {

@@ -2,6 +2,7 @@ import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
 import { RichEmbed }                                  from 'discord.js';
 import { Doc }                                        from '../_lib/Doc';
 import { JSONUtil }                                   from '../_lib/JSONUtil';
+import { EmedUtil }                                   from '../_lib/EmedUtil';
 
 const h2m = require('h2m');
 
@@ -17,15 +18,9 @@ export class DocsCommand extends CommandBase {
 
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io urls', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
+                              .addField('devdocs.io urlsss', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
-    }
-
-    public static getEmbedMsg(title: string, color: number, description: string): RichEmbed {
-        return new RichEmbed().setTitle(title)
-                              .setColor(color)
-                              .setDescription(description);
     }
 
     public static async addReactions(message: any, showPrev: boolean, showNext: boolean) {
@@ -103,7 +98,7 @@ export class DocsCommand extends CommandBase {
                                    To see a list of all possible terms, use the command \`${ process.env.DOCSBOT_PREFIX_TERMS } ${ matches [ 1 ] }\`.
                                   `;
 
-                command.obj.channel.send(DocsCommand.getEmbedMsg('devdocs', 15158332, description));
+                command.obj.channel.send(EmedUtil.getEmbedBasic('devdocs', 15158332, description));
 
             }
 
@@ -210,7 +205,7 @@ export class DocsCommand extends CommandBase {
                              Select the correct term by reacting with the corresponding emoji. 
                             `;
 
-        const message = await command.obj.channel.send(DocsCommand.getEmbedMsg('devdocs', 3447003, description));
+        const message = await command.obj.channel.send(EmedUtil.getEmbedBasic('devdocs', 3447003, description));
 
 
         // @ts-ignore
