@@ -41,7 +41,7 @@ export class AliasAddCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        if (JSONUtil.getLanguageExists(command.namedarguments.language)) {
+        if (JSONUtil.getFile(command.namedarguments.language)) {
 
             const aliasesConfig = Config.load<AliasesConfig>('docsbot_aliases');
 

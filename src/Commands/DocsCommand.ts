@@ -1,8 +1,8 @@
 import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
 import { RichEmbed }                                  from 'discord.js';
 import { Doc }                                        from '../_lib/Doc';
-import { JSONUtil }                                   from '../_lib/JSONUtil';
 import { EmedUtil }                                   from '../_lib/EmedUtil';
+import { JSONUtil }                                   from '../_lib/JSONUtil';
 
 const h2m = require('h2m');
 
@@ -122,12 +122,12 @@ export class DocsCommand extends CommandBase {
 
         if (message) {
 
-            message = await message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
+            message = await message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[ 1 ]));
             messagePassed = true;
 
         } else {
 
-            message = await command.obj.channel.send(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
+            message = await command.obj.channel.send(DocsCommand.getEmbedDoc(result, currentPage, matches[ 1 ]));
             messagePassed = false;
 
         }
@@ -152,7 +152,7 @@ export class DocsCommand extends CommandBase {
                 if (reaction.emoji.name === '🔽') {
 
                     currentPage++;
-                    reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
+                    reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[ 1 ]));
 
                     DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
@@ -161,7 +161,7 @@ export class DocsCommand extends CommandBase {
                     if (currentPage > 0) {
 
                         currentPage--;
-                        reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[1]));
+                        reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[ 1 ]));
 
                     }
 
@@ -207,7 +207,6 @@ export class DocsCommand extends CommandBase {
 
         const message = await command.obj.channel.send(EmedUtil.getEmbedBasic('devdocs', 3447003, description));
 
-
         // @ts-ignore
         await message.react('🗑');
 
@@ -242,7 +241,7 @@ export class DocsCommand extends CommandBase {
 
                 } else {
 
-                    DocsCommand.sendDoc(command, results[emojiNumbers.indexOf(reaction.emoji.name)], matches, message);
+                    DocsCommand.sendDoc(command, results[ emojiNumbers.indexOf(reaction.emoji.name) ], matches, message);
 
                 }
 

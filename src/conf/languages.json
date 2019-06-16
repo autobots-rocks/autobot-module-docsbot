@@ -150,6 +150,7 @@
         "immutable",
         "influxdata",
         "jasmine",
+        "jasmine",
         "jekyll",
         "jest",
         "jquery",
