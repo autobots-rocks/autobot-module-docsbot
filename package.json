@@ -1,6 +1,6 @@
 {
     "name": "@autobot/module-docsbot",
-    "version": "1.0.207",
+    "version": "1.0.208",
     "description": "",
     "main": "dist/index",
     "typings": "dist/index",
