@@ -45,7 +45,7 @@ export class AliasAddCommand extends CommandBase {
 
             const aliasesConfig = Config.load<AliasesConfig>('docsbot_aliases');
 
-            aliasesConfig.aliases[ command.namedarguments.language ] = command.namedarguments.alias;
+            aliasesConfig[ 'aliases' ][ command.namedarguments.language ] = command.namedarguments.alias;
 
             Config.write('docsbot_aliases', aliasesConfig);
 
