@@ -43,10 +43,10 @@ export class AliasListCommand extends CommandBase {
 
         let aliases = Config.load<Alias>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
 
-        console.log(require(process.env.DOCSBOT_ALIASES_CONFIG_PATH));
+        // const aliases = require(process.env.DOCSBOT_ALIASES_CONFIG_PATH));
 
         console.log(aliases);
-        
+
         if (aliases) {
 
             console.log(aliases);
@@ -56,11 +56,11 @@ export class AliasListCommand extends CommandBase {
                                          .setDescription(`the following language aliases are availble:`)
                                          .setFooter('https://github.com/autobots-rocks/autobot-docsbot');
 
-            for (let key in aliases) {
-
-                embed.addField(key, aliases[ key ], true);
-
-            }
+            // for (let key in aliases) {
+            //             //
+            //             //     embed.addField(key, aliases[ key ], true);
+            //             //
+            //             // }
 
             command.obj.channel.send(embed);
 
