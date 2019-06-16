@@ -1,9 +1,9 @@
-import { Command, CommandBase, CommandParser, Config, Event } from '@autobot/common';
-import { RichEmbed }                                          from 'discord.js';
-import { Alias }                                              from '../_lib/Alias';
-import { Doc }                                                from '../_lib/Doc';
-import { EmedUtil }                                           from '../_lib/EmedUtil';
-import { JSONUtil }                                           from '../_lib/JSONUtil';
+import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
+import { RichEmbed }                                  from 'discord.js';
+import { AliasUtil }                                  from '../_lib/AliasUtil';
+import { Doc }                                        from '../_lib/Doc';
+import { EmedUtil }                                   from '../_lib/EmedUtil';
+import { JSONUtil }                                   from '../_lib/JSONUtil';
 
 const h2m = require('h2m');
 
@@ -78,25 +78,7 @@ export class DocsCommand extends CommandBase {
 
         if (matches && matches.length === 3) {
 
-            let result = JSONUtil.getByName(matches[ 1 ], matches[ 2 ]);
-
-            if (!result) {
-
-                const aliases = Config.load<Alias>(process.env.DOCSBOT_ALIASES_CONFIG_PATH);
-
-                for (let key in aliases) {
-
-                    if (aliases[ key ] === matches[ 1 ]) {
-
-                        result = JSONUtil.getByName(key, matches[ 2 ]);
-
-                        break;
-
-                    }
-
-                }
-
-            }
+            let result = JSONUtil.getByName(matches[ 1 ], matches[ 2 ]) || JSONUtil.getByName(AliasUtil.getKeyByValue(matches[ 1 ]), matches[ 2 ]);
 
             if (result) {
 
