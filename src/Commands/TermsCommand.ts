@@ -39,8 +39,6 @@ export class TermsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        console.log(AliasUtil.getKeyByValue(command.arguments[ 0 ].name));
-
         const result = JSONUtil.getTerms(command.arguments[ 0 ].name) || JSONUtil.getTerms(AliasUtil.getKeyByValue(command.arguments[ 0 ].name));
 
         if (result) {
