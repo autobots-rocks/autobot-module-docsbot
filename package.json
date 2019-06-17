@@ -13,7 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@autobot/common": "^1.1.53",
+        "@autobot/common": "^1.1.54",
         "axios": "^0.19.0",
         "discord.js": "^11.4.2",
         "dotenv": "^7.0.0",
