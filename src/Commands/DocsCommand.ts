@@ -78,7 +78,7 @@ export class DocsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{1,32})\\s+([a-z0-9-/~._]{1,64})'));
+        const matches = command.obj.content.match(new RegExp('^' + process.env.DOCSBOT_PREFIX_SEARCH + '([a-z0-9-/~._]{1,32})\\s+([a-z0-9-/~._]{1,64})/i'));
 
         if (matches && matches.length === 3) {
 
