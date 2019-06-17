@@ -17,9 +17,13 @@ export class DocsCommand extends CommandBase {
 
     public static getEmbedDoc(doc: Doc, page: number, searchedFor: string): RichEmbed {
 
+        searchedFor = searchedFor.replace(/\./g, '/');
+
+        const actualTermOrAlias = AliasUtil.getKeyByValue(searchedFor) || searchedFor;
+
         return new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
                               .setColor(3447003)
-                              .addField('devdocs.io urls', `https://devdocs.io/${ searchedFor.replace(/\./g, '/') }/${ doc.key }`)
+                              .addField('devdocs.io urls', `https://devdocs.io/${ actualTermOrAlias }/${ doc.key }`)
                               .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
 
     }
