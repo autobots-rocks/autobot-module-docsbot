@@ -1,7 +1,7 @@
-import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
-import { RichEmbed }                                  from 'discord.js';
-import { AliasUtil }                                  from '../_lib/AliasUtil';
-import { JSONUtil }                                   from '../_lib/JSONUtil';
+import { Colors, Command, CommandBase, CommandParser, Event } from '@autobot/common';
+import { RichEmbed }                                          from 'discord.js';
+import { AliasUtil }                                          from '../_lib/AliasUtil';
+import { JSONUtil }                                           from '../_lib/JSONUtil';
 
 /**
  * Outputs the searchable terms for a language.
@@ -48,7 +48,7 @@ export class TermsCommand extends CommandBase {
             for (let i = 0; i < str.length; i += 2000) {
 
                 command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
-                                                        .setColor(3447003)
+                                                        .setColor(Colors.BLUE)
                                                         .setDescription(result.join(', ').substr(i, 2000)));
 
             }
@@ -56,7 +56,7 @@ export class TermsCommand extends CommandBase {
         } else {
 
             command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                    .setColor(15158332)
+                                                    .setColor(Colors.RED)
                                                     .setDescription(`Could not find any terms for language "${ command.arguments[ 0 ].name }"`));
 
         }

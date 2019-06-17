@@ -1,7 +1,7 @@
-import { Command, CommandBase, CommandParser, Event } from '@autobot/common';
-import axios                                          from 'axios';
-import { RichEmbed }                                  from 'discord.js';
-import * as fs                                        from 'fs';
+import { Colors, Command, CommandBase, CommandParser, Event } from '@autobot/common';
+import axios                                                  from 'axios';
+import { RichEmbed }                                          from 'discord.js';
+import * as fs                                                from 'fs';
 
 /**
  * Downloads the latest db.json file from devdocs.io with an !update <language>.
@@ -55,19 +55,40 @@ export class UpdateCommand extends CommandBase {
 
             fs.writeFile(`${ process.env.DOCSBOT_SAVE_PATH }/${ command.arguments[ 0 ].name }.json`, JSON.stringify(result.data), { encoding: 'utf-8' }, (err) => {
 
-                console.log(err);
+                if (err) {
+
+                    console.log(err);
+
+                    command.obj.channel.send(new RichEmbed().setTitle('docsbot')
+                                                            .setColor(Colors.RED)
+                                                            .setDescription(`Could not write to the save path. Please check your configuration and try again!`));
+
+                } else {
+
+
+                    command.obj.channel.send(new RichEmbed().setTitle('docsbot update')
+                                                            .setColor(Colors.BLUE)
+                                                            .setDescription(`
+                                                    
+                                                                Successfuly downloaded https://docs.devdocs.io/${ command.arguments[ 0 ].name }/db.json!
+                                                                This language is now available with \`${ process.env.DOCSBOT_PREFIX_TERMS }${ command.arguments[ 0 ].name } <search term>\`
+                                                                    
+                                                            `));
+
+                }
 
             });
 
-            command.obj.channel.send(new RichEmbed().setTitle('devdocs update')
-                                                    .setColor(3447003)
-                                                    .setDescription(`Downloaded https://docs.devdocs.io/${ command.arguments[ 0 ].name }/db.json!`));
-
         } else {
 
-            command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-                                                    .setColor(15158332)
-                                                    .setDescription(`Could not find any language "${ command.arguments[ 0 ].name }"`));
+            command.obj.channel.send(new RichEmbed().setTitle('docsbot')
+                                                    .setColor(Colors.RED)
+                                                    .setDescription(`
+                                                    
+                                                        Could not find any language matching "${ command.arguments[ 0 ].name }" from devdocs.io!
+                                                        Try checking out https://devdocs.io and see if you can find a matching variant perhaps.
+                                                    
+                                                    `));
 
         }
 
