@@ -65,13 +65,12 @@ export class UpdateCommand extends CommandBase {
 
                 } else {
 
-
                     command.obj.channel.send(new RichEmbed().setTitle('docsbot update')
                                                             .setColor(Colors.BLUE)
                                                             .setDescription(`
                                                     
                                                                 Successfuly downloaded https://docs.devdocs.io/${ command.arguments[ 0 ].name }/db.json!
-                                                                This language is now available with \`${ process.env.DOCSBOT_PREFIX_TERMS }${ command.arguments[ 0 ].name } <search term>\`
+                                                                This language is now available with \`${ process.env.DOCSBOT_PREFIX_SEARCH }${ command.arguments[ 0 ].name } <search term>\`
                                                                     
                                                             `));
 
