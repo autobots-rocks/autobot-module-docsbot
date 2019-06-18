@@ -4,6 +4,7 @@ import { AliasUtil }                                  from '../_lib/AliasUtil';
 import { Doc }                                        from '../_lib/Doc';
 import { EmedUtil }                                   from '../_lib/EmedUtil';
 import { JSONUtil }                                   from '../_lib/JSONUtil';
+import { paginationFilter }                           from '../_lib/PaginationUtil';
 
 const h2m = require('h2m');
 
@@ -28,7 +29,7 @@ export class DocsCommand extends CommandBase {
 
     }
 
-    public static async addReactions(message: any, showPrev: boolean, showNext: boolean) {
+    public static async addPaginationReactions(message: any, showPrev: boolean, showNext: boolean) {
 
         // @ts-ignore
         await message.clearReactions();
@@ -137,17 +138,10 @@ export class DocsCommand extends CommandBase {
 
         }
 
-        const filter = (reaction: any, user: any) => {
-
-            // @ts-ignore
-            return [ '🗑', '🔼', '🔽' ].includes(reaction.emoji.name);
-
-        };
-
-        DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
+        DocsCommand.addPaginationReactions(message, currentPage > 0, currentPage < result.pages);
 
         // @ts-ignore
-        let collector = message.createReactionCollector(filter, { time: 999999 });
+        let collector = message.createReactionCollector(paginationFilter, { time: 999999 });
 
         // @ts-ignore
         collector.on('collect', async (reaction, collector) => {
@@ -159,7 +153,7 @@ export class DocsCommand extends CommandBase {
                     currentPage++;
                     reaction.message.edit(DocsCommand.getEmbedDoc(result, currentPage, matches[ 1 ]));
 
-                    DocsCommand.addReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+                    DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
                 } else if (reaction.emoji.name === '🔼') {
 
@@ -170,7 +164,7 @@ export class DocsCommand extends CommandBase {
 
                     }
 
-                    DocsCommand.addReactions(message, currentPage > 0, currentPage < result.pages);
+                    DocsCommand.addPaginationReactions(message, currentPage > 0, currentPage < result.pages);
 
                 } else if (reaction.users.has(command.obj.author.id) && reaction.emoji.name === '🗑' && !messagePassed) {
 
