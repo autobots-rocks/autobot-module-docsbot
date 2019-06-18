@@ -121,5 +121,6 @@ export class TermsCommand extends CommandBase {
 
         }
 
-
     }
+
+}
