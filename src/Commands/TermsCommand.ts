@@ -45,6 +45,8 @@ export class TermsCommand extends CommandBase {
         const results = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
 
         console.log('asdfasdfsdf');
+        console.log('asdfasdfsdf');
+        console.log('asdfasdfsdf');
 
         if (results.length > 0) {
 
