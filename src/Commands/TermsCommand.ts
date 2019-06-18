@@ -1,6 +1,5 @@
 import { Colors, Command, CommandBase, CommandParser, Event } from '@autobot/common';
 import { RichEmbed }                                          from 'discord.js';
-import { AliasUtil }                                          from '../_lib/AliasUtil';
 import { JSONUtil }                                           from '../_lib/JSONUtil';
 import { paginationFilter }                                   from '../_lib/PaginationUtil';
 import { DocsCommand }                                        from './DocsCommand';
@@ -41,91 +40,86 @@ export class TermsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        const result = JSONUtil.getTerms(command.arguments[ 0 ].name) || JSONUtil.getTerms(AliasUtil.getKeyByValue(command.arguments[ 0 ].name));
-
         let currentPage = 1;
-        const totalPages = Math.ceil(result.length / 100);
 
-        const temp = [];
-        const embed = new RichEmbed().setTitle(`devdocs terms for "${ command.arguments[ 0 ].name }"`)
-                                     .setURL('https://github.com/autobots-rocks/autobot-module-docsbot')
-                                     .setColor(Colors.BLUE)
-                                     .setFooter('https://github.com/autobots-rocks/autobot-module-docsbot');
+        const results = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
 
-        for (let i = 0; i < result.length; i = currentPage * 100) {
+        console.log('asdfasdfsdf');
 
-            temp.push(result[ i ]);
+        if (results.length > 0) {
 
-        }
+            const embed = new RichEmbed().setTitle(`devdocs terms for "${ command.arguments[ 0 ].name }"`)
+                                         .setURL('https://github.com/autobots-rocks/autobot-module-docsbot')
+                                         .setColor(Colors.BLUE)
+                                         .setFooter('https://github.com/autobots-rocks/autobot-module-docsbot')
+                                         .setDescription(results.join(', '));
 
-        embed.setDescription(temp.join(', '));
+            const message = await command.obj.channel.send(embed);
 
-        const message = await command.obj.channel.send(embed);
+            // @ts-ignore
+            let collector = message.createReactionCollector(paginationFilter, { time: 999999 });
 
-        // @ts-ignore
-        let collector = message.createReactionCollector(paginationFilter, { time: 999999 });
+            // @ts-ignore
+            collector.on('collect', async (reaction, collector) => {
 
-        // @ts-ignore
-        collector.on('collect', async (reaction, collector) => {
+                if (reaction.users.size >= 2 && reaction.me) {
 
-            if (reaction.users.size >= 2 && reaction.me) {
+                    if (reaction.emoji.name === '🔽') {
 
-                if (reaction.emoji.name === '🔽') {
+                        currentPage++;
+                        //     reaction.message.edit(new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
+                        //                                          .setColor(3447003)
+                        //                                          .addField('devdocs.io urls', `https://devdocs.io/${ actualTermOrAlias }/${ doc.key }`)
+                        //                                          .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
+                        // );
+                        //
+                        //     DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
 
-                    currentPage++;
-                    //     reaction.message.edit(new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
-                    //                                          .setColor(3447003)
-                    //                                          .addField('devdocs.io urls', `https://devdocs.io/${ actualTermOrAlias }/${ doc.key }`)
-                    //                                          .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
-                    // );
-                    //
-                    //     DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+                    } else if (reaction.emoji.name === '🔼') {
 
-                } else if (reaction.emoji.name === '🔼') {
+                        if (currentPage > 0) {
 
-                    if (currentPage > 0) {
+                            currentPage--;
 
-                        currentPage--;
+                        }
 
-                    }
+                        DocsCommand.addPaginationReactions(message, currentPage > 0, true);
 
-                    DocsCommand.addPaginationReactions(message, currentPage > 0, currentPage < totalPages);
+                    } else if (reaction.users.has(command.obj.author.id) && reaction.emoji.name === '🗑') {
 
-                } else if (reaction.users.has(command.obj.author.id) && reaction.emoji.name === '🗑') {
+                        if (reaction.me) {
 
-                    if (reaction.me) {
+                            reaction.message.delete();
 
-                        reaction.message.delete();
+                        }
 
                     }
 
                 }
 
-            }
+            });
+            //
+            // if (result) {
+            //
+            //     // const str = result.join(', ');
+            //     //
+            //     // for (let i = 0; i < str.length; i += 2000) {
+            //     //
+            //     //     command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
+            //     //                                             .setColor(Colors.BLUE)
+            //     //                                             .setDescription(result.join(', ').substr(i, 2000)));
+            //     //
+            //     // }
+            //
+            // } else {
+            //
+            //     command.obj.channel.send(new RichEmbed().setTitle('devdocs')
+            //                                             .setColor(Colors.RED)
+            //                                             .setDescription(`Could not find any terms for language "${ command.arguments[ 0 ].name }"`));
+            //
+            // }
 
-        });
-        //
-        // if (result) {
-        //
-        //     // const str = result.join(', ');
-        //     //
-        //     // for (let i = 0; i < str.length; i += 2000) {
-        //     //
-        //     //     command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
-        //     //                                             .setColor(Colors.BLUE)
-        //     //                                             .setDescription(result.join(', ').substr(i, 2000)));
-        //     //
-        //     // }
-        //
-        // } else {
-        //
-        //     command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-        //                                             .setColor(Colors.RED)
-        //                                             .setDescription(`Could not find any terms for language "${ command.arguments[ 0 ].name }"`));
-        //
-        // }
+        }
+
 
     }
-
-
-}

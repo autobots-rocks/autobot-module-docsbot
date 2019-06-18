@@ -1,6 +1,7 @@
-import * as fs   from 'fs';
-import * as Fuse from 'fuse.js';
-import { Doc }   from './Doc';
+import * as fs       from 'fs';
+import * as Fuse     from 'fuse.js';
+import { AliasUtil } from './AliasUtil';
+import { Doc }       from './Doc';
 
 export class JSONUtil {
 
@@ -98,6 +99,22 @@ export class JSONUtil {
             }
 
         }
+
+    }
+
+    public static getTermsPage(languageOrAlias: string, pageNumber: number, limit: number): Array<string> {
+
+        const result = JSONUtil.getTerms(languageOrAlias) || JSONUtil.getTerms(AliasUtil.getKeyByValue(languageOrAlias));
+
+        const temp = [];
+
+        for (let i = 0; i < result.length; i = pageNumber * limit) {
+
+            temp.push(result[ i ]);
+
+        }
+
+        return temp;
 
     }
 
