@@ -108,7 +108,7 @@ export class JSONUtil {
 
         const temp = [];
 
-        for (let i = 0; i < result.length; i = pageNumber * limit) {
+        for (let i = pageNumber * limit; i < result.length; i++) {
 
             console.log(i);
 
