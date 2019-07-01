@@ -103,26 +103,6 @@ export class TermsCommand extends CommandBase {
                 }
 
             });
-            //
-            // if (result) {
-            //
-            //     // const str = result.join(', ');
-            //     //
-            //     // for (let i = 0; i < str.length; i += 2000) {
-            //     //
-            //     //     command.obj.channel.send(new RichEmbed().setTitle(`devdocs searchable for "${ command.arguments[ 0 ].name }"`)
-            //     //                                             .setColor(Colors.BLUE)
-            //     //                                             .setDescription(result.join(', ').substr(i, 2000)));
-            //     //
-            //     // }
-            //
-            // } else {
-            //
-            //     command.obj.channel.send(new RichEmbed().setTitle('devdocs')
-            //                                             .setColor(Colors.RED)
-            //                                             .setDescription(`Could not find any terms for language "${ command.arguments[ 0 ].name }"`));
-            //
-            // }
 
         }
 
