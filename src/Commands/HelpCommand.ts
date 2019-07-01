@@ -16,40 +16,30 @@ export class HelpCommand extends CommandBase {
         //
         // Set this commands configuration.
         //
-        // super({
-        //
-        //     event: Event.MESSAGE,
-        //     name: process.env.DOCSBOT_PREFIX_HELP,
-        //     group: 'docs',
-        //     requiredEnvVars: [
-        //
-        //         'DOCSBOT_PREFIX_HELP',
-        //         'DOCSBOT_PREFIX_SEARCH',
-        //         'DOCSBOT_SAVE_PATH',
-        //         'DOCSBOT_ADMIN_ROLE_NAME',
-        //         'DOCSBOT_PREFIX_UPDATE',
-        //         'DOCSBOT_PREFIX_TERMS',
-        //         'DOCSBOT_PREFIX_CHEAT'
-        //
-        //     ],
-        //     roles: [
-        //
-        //         process.env.DOCSBOT_ADMIN_ROLE_NAME
-        //
-        //     ],
-        //     description: 'Outputs help information.'
-        //
-        // });
-
         super({
 
             event: Event.MESSAGE,
-            name: 'asdf',
-            group: 'asdfasdf',
-            description: 'asdfasdf'
+            name: process.env.DOCSBOT_PREFIX_HELP,
+            group: 'docs',
+            requiredEnvVars: [
+
+                'DOCSBOT_PREFIX_HELP',
+                'DOCSBOT_PREFIX_SEARCH',
+                'DOCSBOT_SAVE_PATH',
+                'DOCSBOT_ADMIN_ROLE_NAME',
+                'DOCSBOT_PREFIX_UPDATE',
+                'DOCSBOT_PREFIX_TERMS',
+                'DOCSBOT_PREFIX_CHEAT'
+
+            ],
+            roles: [
+
+                process.env.DOCSBOT_ADMIN_ROLE_NAME
+
+            ],
+            description: 'Outputs help information.'
 
         });
-        console.log(12312313123);
 
     }
 

@@ -1,9 +1,9 @@
-// export * from './Commands/AliasAddCommand';
-// export * from './Commands/AliasListCommand';
-// export * from './Commands/AliasDeleteCommand';
-// export * from './Commands/Cheat.shCommand';
-// export * from './Commands/DocsCommand';
+export * from './Commands/AliasAddCommand';
+export * from './Commands/AliasListCommand';
+export * from './Commands/AliasDeleteCommand';
+export * from './Commands/Cheat.shCommand';
+export * from './Commands/DocsCommand';
 export * from './Commands/HelpCommand';
-// export * from './Commands/ListFilesCommand';
-// export * from './Commands/TermsCommand';
-// export * from './Commands/UpdateCommand';
+export * from './Commands/ListFilesCommand';
+export * from './Commands/TermsCommand';
+export * from './Commands/UpdateCommand';
