@@ -110,9 +110,9 @@ export class JSONUtil {
 
         for (let i = 0; i < limit; i++) {
 
-            console.log(i);
+            console.log(1111, i);
 
-            temp.push(result[ i + pageNumber * limit ]);
+            temp.push(result[ i + (pageNumber * limit) ]);
 
         }
 
