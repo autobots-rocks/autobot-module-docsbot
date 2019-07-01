@@ -30,7 +30,7 @@ export class TermsCommand extends CommandBase {
             event: Event.MESSAGE,
             name: `${ process.env.DOCSBOT_PREFIX_TERMS }`,
             group: 'docs',
-            requiredEnvVars: [ 'DOCSBOT_PREFIX_TERMS', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS', 'DOCSBOT_LIMIT_CHARS' ],
+            requiredEnvVars: [ 'DOCSBOT_PREFIX_TERMS', 'DOCSBOT_TERMS_PAGE_LIMIT', 'DOCSBOT_SAVE_PATH', 'DOCSBOT_ADMIN_ROLE_NAME', 'DOCSBOT_LIMIT_CHARS', 'DOCSBOT_LIMIT_CHARS' ],
             roles: [
 
                 process.env.DOCSBOT_ADMIN_ROLE_NAME
@@ -52,7 +52,7 @@ export class TermsCommand extends CommandBase {
 
         let currentPage = 0;
 
-        const termsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
+        const termsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, Number(process.env.DOCSBOT_TERMS_PAGE_LIMIT));
 
         if (termsPage.results.length > 0) {
 
@@ -74,7 +74,7 @@ export class TermsCommand extends CommandBase {
 
                         currentPage++;
 
-                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
+                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, Number(process.env.DOCSBOT_TERMS_PAGE_LIMIT));
 
                         reaction.message.edit(TermsCommand.getMessageEmbed(command.arguments[ 0 ].name, nextTermsPage.results.join(', ')));
 
@@ -84,7 +84,7 @@ export class TermsCommand extends CommandBase {
 
                         currentPage--;
 
-                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
+                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, Number(process.env.DOCSBOT_TERMS_PAGE_LIMIT));
 
                         reaction.message.edit(TermsCommand.getMessageEmbed(command.arguments[ 0 ].name, nextTermsPage.results.join(', ')));
 
