@@ -2,6 +2,7 @@ import * as fs       from 'fs';
 import * as Fuse     from 'fuse.js';
 import { AliasUtil } from './AliasUtil';
 import { Doc }       from './Doc';
+import { TermsPage } from './TermsPage';
 
 export class JSONUtil {
 
@@ -102,7 +103,7 @@ export class JSONUtil {
 
     }
 
-    public static getTermsPage(languageOrAlias: string, pageNumber: number, limit: number): Array<string> {
+    public static getTermsPage(languageOrAlias: string, pageNumber: number, limit: number): TermsPage {
 
         const result = JSONUtil.getTerms(languageOrAlias) || JSONUtil.getTerms(AliasUtil.getKeyByValue(languageOrAlias));
 
@@ -116,7 +117,7 @@ export class JSONUtil {
 
         }
 
-        return temp;
+        return new TermsPage(temp, Math.floor(result.length / limit));
 
     }
 

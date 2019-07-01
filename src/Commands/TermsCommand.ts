@@ -42,23 +42,27 @@ export class TermsCommand extends CommandBase {
 
         let currentPage = 1;
 
-        const results = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
+        const termsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
 
-        if (results.length > 0) {
+        if (termsPage.results.length > 0) {
 
             const embed = new RichEmbed().setTitle(`devdocs terms for "${ command.arguments[ 0 ].name }"`)
                                          .setURL('https://github.com/autobots-rocks/autobot-module-docsbot')
                                          .setColor(Colors.BLUE)
                                          .setFooter('https://github.com/autobots-rocks/autobot-module-docsbot')
-                                         .setDescription(results.join(', '));
+                                         .setDescription(termsPage.results.join(', '));
 
             const message = await command.obj.channel.send(embed);
+
+            DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < termsPage.pages);
 
             // @ts-ignore
             let collector = message.createReactionCollector(paginationFilter, { time: 999999 });
 
             // @ts-ignore
             collector.on('collect', async (reaction, collector) => {
+
+                console.log(reaction.users.size);
 
                 if (reaction.users.size >= 2 && reaction.me) {
 
