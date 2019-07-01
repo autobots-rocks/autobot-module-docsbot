@@ -10,6 +10,16 @@ import { DocsCommand }                                        from './DocsComman
 @Command
 export class TermsCommand extends CommandBase {
 
+    public static getMessageEmbed(term: string, results: string): RichEmbed {
+
+        return new RichEmbed().setTitle(`devdocs terms for "${ term }"`)
+                              .setURL('https://github.com/autobots-rocks/autobot-module-docsbot')
+                              .setColor(Colors.BLUE)
+                              .setFooter('https://github.com/autobots-rocks/autobot-module-docsbot')
+                              .setDescription(results);
+
+    }
+
     public constructor() {
 
         //
@@ -40,19 +50,13 @@ export class TermsCommand extends CommandBase {
      */
     public async run(command: CommandParser) {
 
-        let currentPage = 1;
+        let currentPage = 0;
 
         const termsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
 
         if (termsPage.results.length > 0) {
 
-            const embed = new RichEmbed().setTitle(`devdocs terms for "${ command.arguments[ 0 ].name }"`)
-                                         .setURL('https://github.com/autobots-rocks/autobot-module-docsbot')
-                                         .setColor(Colors.BLUE)
-                                         .setFooter('https://github.com/autobots-rocks/autobot-module-docsbot')
-                                         .setDescription(termsPage.results.join(', '));
-
-            const message = await command.obj.channel.send(embed);
+            const message = await command.obj.channel.send(TermsCommand.getMessageEmbed(command.arguments[ 0 ].name, termsPage.results.join(', ')));
 
             DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < termsPage.pages);
 
@@ -69,23 +73,22 @@ export class TermsCommand extends CommandBase {
                     if (reaction.emoji.name === '🔽') {
 
                         currentPage++;
-                        //     reaction.message.edit(new RichEmbed().setTitle(`devdocs: "${ doc.key }"`)
-                        //                                          .setColor(3447003)
-                        //                                          .addField('devdocs.io urls', `https://devdocs.io/${ actualTermOrAlias }/${ doc.key }`)
-                        //                                          .setDescription(h2m(doc.doc).substr(DocsCommand.PAGE_LENGTH * page, DocsCommand.PAGE_LENGTH));
-                        // );
-                        //
-                        //     DocsCommand.addPaginationReactions(message, currentPage > 0, (currentPage + 1) < result.pages);
+
+                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
+
+                        reaction.message.edit(TermsCommand.getMessageEmbed(command.arguments[ 0 ].name, nextTermsPage.results.join(', ')));
+
+                        DocsCommand.addPaginationReactions(message, currentPage > 0, currentPage < nextTermsPage.pages);
 
                     } else if (reaction.emoji.name === '🔼') {
 
-                        if (currentPage > 0) {
+                        currentPage--;
 
-                            currentPage--;
+                        const nextTermsPage = JSONUtil.getTermsPage(command.arguments[ 0 ].name, currentPage, 20);
 
-                        }
+                        reaction.message.edit(TermsCommand.getMessageEmbed(command.arguments[ 0 ].name, nextTermsPage.results.join(', ')));
 
-                        DocsCommand.addPaginationReactions(message, currentPage > 0, true);
+                        DocsCommand.addPaginationReactions(message, currentPage > 0, currentPage < nextTermsPage.pages);
 
                     } else if (reaction.users.has(command.obj.author.id) && reaction.emoji.name === '🗑') {
 
