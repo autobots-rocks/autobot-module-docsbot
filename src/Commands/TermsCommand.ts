@@ -66,8 +66,6 @@ export class TermsCommand extends CommandBase {
             // @ts-ignore
             collector.on('collect', async (reaction, collector) => {
 
-                console.log(reaction.users.size);
-
                 if (reaction.users.size >= 2 && reaction.me) {
 
                     if (reaction.emoji.name === '🔽') {
