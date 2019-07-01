@@ -110,6 +110,8 @@ export class JSONUtil {
 
         for (let i = 0; i < result.length; i = pageNumber * limit) {
 
+            console.log(i);
+
             temp.push(result[ i ]);
 
         }
